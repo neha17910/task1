@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRODIGY INFOTECH | Task 01</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --bg2:#111833;
+      --card:#141b35;
+      --text:#f5f7ff;
+      --muted:#b2b9dd;
+      --accent:#7c5cff;
+      --accent2:#22c55e;
+      --line:rgba(255,255,255,.08);
+      --shadow:0 20px 50px rgba(0,0,0,.35);
+      --navH:78px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(124,92,255,.22), transparent 28%),
+        radial-gradient(circle at top right, rgba(34,197,94,.18), transparent 22%),
+        linear-gradient(160deg,var(--bg),var(--bg2));
+      overflow-x:hidden;
+    }
+
+    a{text-decoration:none;color:inherit}
+    button{font:inherit}
+
+    .navbar{
+      position:fixed;
+      top:0; left:0; right:0;
+      height:var(--navH);
+      z-index:1000;
+      display:flex;
+      align-items:center;
+      transition:all .25s ease;
+      background:rgba(8,12,24,.32);
+      border-bottom:1px solid transparent;
+      backdrop-filter:blur(12px);
+    }
+
+    .navbar.scrolled{
+      height:68px;
+      background:rgba(9,12,22,.88);
+      border-bottom:1px solid var(--line);
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+
+    .nav-wrap{
+      width:min(1180px, calc(100% - 32px));
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      letter-spacing:.02em;
+      white-space:nowrap;
+    }
+
+    .logo{
+      width:42px;height:42px;border-radius:14px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--accent),#9b8cff);
+      box-shadow:0 10px 20px rgba(124,92,255,.25);
+      font-weight:900;
+    }
+
+    .brand span{
+      font-size:1rem;
+      line-height:1.1;
+    }
+
+    .brand small{
+      display:block;
+      color:var(--muted);
+      font-size:.74rem;
+      font-weight:600;
+      margin-top:2px;
+    }
+
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      list-style:none;
+      padding:8px;
+      border-radius:999px;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+    }
+
+    .nav-links a{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:12px 18px;
+      border-radius:999px;
+      color:var(--muted);
+      font-weight:700;
+      transition:all .2s ease;
+      position:relative;
+    }
+
+    .nav-links a:hover{
+      color:#fff;
+      background:rgba(124,92,255,.18);
+      transform:translateY(-1px);
+    }
+
+    .nav-links a.active{
+      color:#fff;
+      background:linear-gradient(135deg,var(--accent),#9b8cff);
+      box-shadow:0 8px 18px rgba(124,92,255,.24);
+    }
+
+    .menu-btn{
+      display:none;
+      width:46px;height:46px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:#fff;
+      border-radius:14px;
+      cursor:pointer;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .menu-btn span{
+      width:20px;height:2px;background:#fff;display:block;position:relative;border-radius:2px;
+    }
+    .menu-btn span::before,.menu-btn span::after{
+      content:"";position:absolute;left:0;width:20px;height:2px;background:#fff;border-radius:2px;
+      transition:transform .2s ease, top .2s ease;
+    }
+    .menu-btn span::before{top:-6px}
+    .menu-btn span::after{top:6px}
+
+    .hero{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:calc(var(--navH) + 30px) 20px 40px;
+    }
+
+    .hero-inner{
+      width:min(1180px,100%);
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:28px;
+      align-items:center;
+    }
+
+    .hero-text h1{
+      font-size:clamp(2.4rem,5vw,5.2rem);
+      line-height:1.02;
+      letter-spacing:-.05em;
+      margin-bottom:16px;
+    }
+
+    .hero-text h1 span{
+      color:#c9c1ff;
+    }
+
+    .hero-text p{
+      color:var(--muted);
+      font-size:1.05rem;
+      line-height:1.75;
+      max-width:58ch;
+      margin-bottom:26px;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      margin-bottom:26px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:14px 20px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      font-weight:800;
+      transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+      cursor:pointer;
+    }
+
+    .btn:hover{transform:translateY(-2px)}
+    .btn.primary{
+      background:linear-gradient(135deg,var(--accent),#9b8cff);
+      color:#fff;
+      box-shadow:0 14px 30px rgba(124,92,255,.28);
+    }
+
+    .btn.secondary{
+      background:rgba(255,255,255,.05);
+      color:#fff;
+    }
+
+    .hero-stats{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .stat{
+      min-width:160px;
+      padding:16px 18px;
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+    }
+
+    .stat strong{
+      display:block;
+      font-size:1.5rem;
+      margin-bottom:4px;
+    }
+
+    .stat span{color:var(--muted);font-size:.92rem}
+
+    .hero-card{
+      padding:22px;
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(16px);
+    }
+
+    .glass-panel{
+      background:rgba(10,13,28,.65);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:22px;
+    }
+
+    .feature-list{
+      display:grid;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .feature{
+      display:flex;
+      gap:14px;
+      align-items:flex-start;
+      padding:16px;
+      border-radius:18px;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+    }
+
+    .icon{
+      width:42px;height:42px;border-radius:14px;
+      background:linear-gradient(135deg,rgba(124,92,255,.35),rgba(34,197,94,.24));
+      display:grid;place-items:center;
+      flex:0 0 auto;
+    }
+
+    section{
+      padding:90px 20px;
+    }
+
+    .container{
+      width:min(1180px,100%);
+      margin:0 auto;
+    }
+
+    .section-title{
+      font-size:clamp(1.8rem,3vw,3rem);
+      margin-bottom:12px;
+      letter-spacing:-.03em;
+    }
+
+    .section-sub{
+      color:var(--muted);
+      max-width:70ch;
+      line-height:1.7;
+      margin-bottom:30px;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+
+    .card{
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:22px;
+      box-shadow:var(--shadow);
+      transition:transform .2s ease, background .2s ease;
+    }
+
+    .card:hover{
+      transform:translateY(-4px);
+      background:rgba(255,255,255,.07);
+    }
+
+    .card h3{margin:14px 0 10px}
+    .card p{color:var(--muted);line-height:1.7}
+
+    .contact-box{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      align-items:stretch;
+    }
+
+    .contact-panel{
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:22px;
+    }
+
+    .contact-panel input,.contact-panel textarea{
+      width:100%;
+      margin-top:12px;
+      padding:14px 15px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(7,10,20,.65);
+      color:#fff;
+      outline:none;
+    }
+
+    .contact-panel input:focus,.contact-panel textarea:focus{
+      border-color:rgba(124,92,255,.7);
+      box-shadow:0 0 0 4px rgba(124,92,255,.12);
+    }
+
+    .contact-panel textarea{min-height:140px;resize:vertical}
+
+    footer{
+      padding:28px 20px 40px;
+      border-top:1px solid var(--line);
+      color:var(--muted);
+      text-align:center;
+    }
+
+    @media (max-width: 920px){
+      .hero-inner,.cards,.contact-box{grid-template-columns:1fr}
+      .nav-links{
+        position:fixed;
+        top:calc(var(--navH) + 12px);
+        left:16px;
+        right:16px;
+        flex-direction:column;
+        align-items:stretch;
+        padding:12px;
+        border-radius:22px;
+        background:rgba(9,12,22,.96);
+        transform:translateY(-20px);
+        opacity:0;
+        pointer-events:none;
+        transition:all .25s ease;
+      }
+      .nav-links.open{
+        transform:translateY(0);
+        opacity:1;
+        pointer-events:auto;
+      }
+      .nav-links a{width:100%;justify-content:flex-start}
+      .menu-btn{display:inline-flex}
+    }
+
+    @media (max-width: 600px){
+      :root{--navH:72px}
+      .hero-text h1{font-size:2.4rem}
+      .stat{min-width:100%}
+      .btn{width:100%}
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-wrap">
+      <a href="#home" class="brand">
+        <div class="logo">P</div>
+        <div>
+          <span>PRODIGY INFOTECH</span>
+          <small>Task 01 Responsive Landing Page</small>
+        </div>
+      </a>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="active">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Features</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-inner">
+        <div class="hero-text">
+          <h1>Build a <span>responsive</span> landing page with a smart navbar.</h1>
+          <p>
+            This page uses HTML for structure, CSS for a premium visual design, and JavaScript
+            for scroll-based navbar effects, hover interactions, and mobile menu control.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#services" class="btn primary">Explore Features</a>
+            <a href="#contact" class="btn secondary">Get in Touch</a>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat">
+              <strong>Fixed</strong>
+              <span>Navbar stays visible on scroll</span>
+            </div>
+            <div class="stat">
+              <strong>Responsive</strong>
+              <span>Works great on mobile and desktop</span>
+            </div>
+            <div class="stat">
+              <strong>Interactive</strong>
+              <span>Hover + scroll style changes</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="glass-panel">
+            <h2>UI / UX Highlights</h2>
+            <div class="feature-list">
+              <div class="feature">
+                <div class="icon">⚡</div>
+                <div>
+                  <strong>Scroll-aware navbar</strong>
+                  <p style="color:var(--muted);margin-top:6px;line-height:1.6">
+                    Background and shadow change when the page scrolls.
+                  </p>
+                </div>
+              </div>
+              <div class="feature">
+                <div class="icon">🎯</div>
+                <div>
+                  <strong>Hover interactions</strong>
+                  <p style="color:var(--muted);margin-top:6px;line-height:1.6">
+                    Menu items highlight smoothly on hover and active state.
+                  </p>
+                </div>
+              </div>
+              <div class="feature">
+                <div class="icon">📱</div>
+                <div>
+                  <strong>Mobile menu</strong>
+                  <p style="color:var(--muted);margin-top:6px;line-height:1.6">
+                    Hamburger navigation opens nicely on smaller screens.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <h2 class="section-title">About This Task</h2>
+        <p class="section-sub">
+          This landing page is designed for a clean internship submission style. It focuses on usability, fast loading, strong visual hierarchy, and smooth interactions that feel modern and professional.
+        </p>
+
+        <div class="cards">
+          <div class="card">
+            <h3>Clean Structure</h3>
+            <p>Simple semantic HTML sections make the page easy to maintain and expand.</p>
+          </div>
+          <div class="card">
+            <h3>Modern Styling</h3>
+            <p>Glassmorphism cards, gradients, soft shadows, and smooth transitions improve visual quality.</p>
+          </div>
+          <div class="card">
+            <h3>Easy Customization</h3>
+            <p>You can change colors, text, and sections quickly for your own project or portfolio.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <div class="container">
+        <h2 class="section-title">Features</h2>
+        <p class="section-sub">
+          The navigation is fixed, fully responsive, and interactive. Scroll the page to see the navbar change style, and hover over any menu item to see the effect.
+        </p>
+
+        <div class="cards">
+          <div class="card"><h3>Fixed Navbar</h3><p>Always visible at the top for better navigation.</p></div>
+          <div class="card"><h3>Scroll Effect</h3><p>Navbar changes appearance when you scroll down.</p></div>
+          <div class="card"><h3>Hover Effect</h3><p>Menu items glow and animate smoothly on hover.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <h2 class="section-title">Contact Section</h2>
+        <p class="section-sub">You can place your submission details, inquiry form, or call-to-action here.</p>
+
+        <div class="contact-box">
+          <div class="contact-panel">
+            <h3>Send a Message</h3>
+            <input type="text" placeholder="Your Name" />
+            <input type="email" placeholder="Your Email" />
+            <textarea placeholder="Write your message here..."></textarea>
+            <div style="margin-top:14px">
+              <button class="btn primary" style="border:none">Submit</button>
+            </div>
+          </div>
+
+          <div class="contact-panel">
+            <h3>PRODIGY INFOTECH</h3>
+            <p style="color:var(--muted);line-height:1.8;margin-top:12px">
+              Task 01 Responsive Landing Page
+              <br />Interactive navigation menu
+              <br />HTML + CSS + JavaScript
+              <br />Good UI/UX and mobile-friendly layout
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 PRODIGY INFOTECH | Task 01 Responsive Landing Page
+  </footer>
+
+  <script>
+    const navbar = document.getElementById('navbar');
+    const navLinks = document.getElementById('navLinks');
+    const menuBtn = document.getElementById('menuBtn');
+    const links = document.querySelectorAll('.nav-links a');
+    const sections = document.querySelectorAll('section[id]');
+
+    function setActiveLink() {
+      let current = '';
+      sections.forEach(section => {
+        const top = section.offsetTop - 120;
+        if (scrollY >= top) current = section.getAttribute('id');
+      });
+
+      links.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+      setActiveLink();
+    });
+
+    menuBtn.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    links.forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!navbar.contains(e.target)) navLinks.classList.remove('open');
+    });
+
+    setActiveLink();
+  </script>
+</body>
+</html>
